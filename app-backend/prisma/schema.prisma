@@ -12,3 +12,30 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model worker {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  tasks     Task[]
+  scores    Score[]
+}
+
+model Task {
+  id            Int      @id @default(autoincrement())
+  productCode   String
+  operation     String
+  startTime     DateTime
+  endTime       DateTime
+  duration      Float
+  workerId      Int
+  worker        Worker   @relation(fields: [workerId], references: [id])
+}
+
+model Score {
+  id        Int      @id @default(autoincrement())
+  value     Float
+  workerId  Int
+  worker    Worker   @relation(fields: [workerId], references: [id])
+}
